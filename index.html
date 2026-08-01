@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Graduation Cian Ochen</title>
+    <!-- Font seperti di video -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Montserrat:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #fcf8f2; 
+            --bg-lighter: #f5ede4;
+            --text-main: #3b1b2d;
+            --text-pink: #c75b87; 
+            --font-heading: 'Cinzel', serif;
+            --font-text: 'Montserrat', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-color); color: var(--text-main);
+            font-family: var(--font-text); overflow-x: hidden;
+            -webkit-user-select: none; user-select: none;
+        }
+
+        .container {
+            max-width: 480px; margin: 0 auto; min-height: 100vh;
+            position: relative; background-color: var(--bg-color);
+            box-shadow: 0 0 20px rgba(0,0,0,0.15); overflow: hidden;
+        }
+
+        /* --- Background: Bunga, Foto+Topi (turun ke bawah), Topi (berputar) --- */
+        .falling-elements {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 5; overflow: hidden;
+        }
+
+        .flower-flake {
+            position: absolute; top: -10%; font-size: 1.2rem;
+            animation: fallFlower linear infinite; opacity: 0.7;
+        }
+        @keyframes fallFlower {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Elemen Gabungan Foto + Topi - JATUH KE BAWAH */
+        .flying-falling {
+            position: absolute; top: -10%;
+            animation: fallDown linear infinite; opacity: 0.9;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .grad-photo-combo {
+            position: relative;
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            border: 2px solid var(--text-pink);
+            overflow: visible;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .grad-photo-combo img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .grad-photo-combo .mini-cap {
+            position: absolute;
+            top: -12px; right: -5px;
+            font-size: 1.5rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        @keyframes fallDown {
+            0% { transform: translateY(-10vh); opacity: 0; }
+            10% { opacity: 0.9; }
+            90% { opacity: 0.9; }
+            100% { transform: translateY(115vh); opacity: 0; }
+        }
+
+        .floating-cap {
+            position: absolute; top: -10%;
+            font-size: 2rem;
+            animation: floatAround ease-in-out infinite;
+            opacity: 0.8;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+        }
+        @keyframes floatAround {
+            0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0; }
+            30% { transform: translateY(30vh) rotate(180deg) scale(1); opacity: 0.8; }
+            70% { transform: translateY(70vh) rotate(270deg) scale(1.1); opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(360deg) scale(0.9); opacity: 0; }
+        }
+
+        /* --- Screens --- */
+        .screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background-color: var(--bg-color); z-index: 20; padding: 20px;
+            transition: opacity 0.8s ease, visibility 0.8s ease; text-align: center;
+        }
+        .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .scrollable { 
+            height: 100vh; overflow-y: auto; overflow-x: hidden; 
+            scroll-behavior: smooth; display: none; padding-bottom: 100px;
+        }
+        .scrollable.active { display: block; }
+
+        h1, h2, h3 { font-family: var(--font-heading); font-weight: normal; margin-bottom: 15px; color: var(--text-main); }
+        .section-label { font-size: 0.6rem; letter-spacing: 3px; color: var(--text-pink); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .section-label::before, .section-label::after { content: '🎓'; font-size: 0.8rem; }
+        
+        .section { padding: 60px 20px; position: relative; }
+
+        /* --- 1. Loading Screen --- */
+        .loading-flower {
+            font-size: 3rem; color: var(--text-pink); margin-bottom: 20px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .loading-text { font-size: 0.8rem; opacity: 0.8; color: var(--text-main); }
+
+        /* --- 2. Passcode Screen --- */
+        #passcode-screen h2 { font-size: 2rem; margin-bottom: 5px; color: var(--text-main); }
+        #passcode-screen p { font-size: 0.8rem; opacity: 0.7; margin-bottom: 30px; color: var(--text-main); }
+        .dots { display: flex; gap: 12px; margin-bottom: 40px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--text-pink); transition: 0.3s; }
+        .dot.active { background-color: var(--text-pink); box-shadow: 0 0 8px var(--text-pink); }
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 250px; }
+        .key {
+            width: 60px; height: 60px; border-radius: 50%; background: transparent;
+            border: 1px solid rgba(59, 27, 45, 0.2); color: var(--text-main);
+            font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s;
+        }
+        .key:active { background: rgba(199, 91, 135, 0.2); border-color: var(--text-pink); }
+
+        /* --- 3. Gift Screen --- */
+        .gift-img { font-size: 6rem; cursor: pointer; filter: drop-shadow(0 0 15px rgba(199, 91, 135, 0.3)); transition: transform 0.2s; }
+        .gift-img:active { transform: scale(0.9); }
+        .gift-text { font-size: 0.9rem; margin-bottom: 40px; color: var(--text-main); }
+        .opening { animation: expand 1s forwards; }
+        @keyframes expand { 0% { transform: scale(1); } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(5); opacity: 0; } }
+
+        /* --- 4. Main Content: Hero --- */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .hero h1 { font-size: 2.5rem; line-height: 1.3; margin: 15px 0; color: var(--text-main); }
+        .hero-date { font-size: 0.7rem; letter-spacing: 2px; color: rgba(59, 27, 45, 0.6); }
+        .scroll-down { margin-top: 50px; font-size: 1.2rem; color: var(--text-pink); animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+
+        /* --- Digital Bouquet Interaktif --- */
+        .bouquet-wrapper {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .bouquet-items {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 3rem;
+            margin-bottom: 25px;
+        }
+        .bouquet-flower {
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }
+        .bouquet-flower:hover {
+            transform: scale(1.25) translateY(-5px);
+        }
+        .bouquet-flower:active {
+            transform: scale(0.9);
+        }
+        .bouquet-display-box {
+            background: rgba(59, 27, 45, 0.03);
+            border: 1px solid rgba(199, 91, 135, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+        }
+        .bouquet-message {
+            font-size: 0.95rem;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--text-main);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInMsg 0.5s forwards;
+        }
+        @keyframes fadeInMsg {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Letter --- */
+        .letter-paper {
+            background: #ffffff; color: #333; padding: 40px 30px; border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); position: relative; margin-top: 20px;
+        }
+        .letter-paper::before { content: '1 Agustus 2026'; position: absolute; top: 15px; right: 20px; font-family: var(--font-heading); color: var(--text-pink); font-size: 0.9rem; }
+        .letter-paper h2 { font-size: 1.8rem; margin-bottom: 20px; color: #222; text-align: left; }
+        .letter-paper p { font-size: 0.9rem; line-height: 1.8; margin-bottom: 15px; text-align: justify; }
+        .by-gosin { font-size: 0.8rem; color: #777; margin-top: 15px; text-align: right; font-style: italic; text-transform: uppercase; }
+
+        /* --- Photo Memories --- */
+        .photo-feed { display: flex; flex-direction: column; gap: 40px; align-items: center; margin-top: 30px;}
+        .photo-card {
+            background: white; padding: 10px 10px 30px 10px; width: 260px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); transform: rotate(-2deg);
+        }
+        .photo-card:nth-child(even) { transform: rotate(2deg); }
+        .photo-card img { width: 100%; height: 260px; object-fit: cover; background: #ddd; }
+        .photo-caption { color: #333; font-family: var(--font-heading); font-size: 0.9rem; margin-top: 15px; font-style: italic; }
+
+        /* --- Timeline --- */
+        .timeline-container { position: relative; padding-left: 30px; margin-top: 30px; text-align: left;}
+        .timeline-container::before { content:''; position: absolute; left: 10px; top: 0; height: 100%; width: 2px; background: rgba(59, 27, 45, 0.2); }
+        .time-item { margin-bottom: 35px; position: relative; }
+        .time-icon {
+            position: absolute; left: -36px; top: 0; width: 24px; height: 24px;
+            background: var(--bg-lighter); border-radius: 50%; border: 2px solid var(--text-pink);
+            display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: var(--text-main);
+        }
+        .time-date { font-size: 0.6rem; letter-spacing: 1px; color: var(--text-pink); margin-bottom: 5px; text-transform: uppercase;}
+        .time-title { font-size: 1.1rem; font-family: var(--font-heading); margin-bottom: 5px; color: var(--text-main); }
+        .time-desc { font-size: 0.8rem; opacity: 0.7; line-height: 1.5; color: var(--text-main); }
+
+        /* --- Music Player --- */
+        .player-box { background: rgba(59, 27, 45, 0.03); border-radius: 20px; padding: 30px; margin-top: 20px; border: 1px solid rgba(199, 91, 135, 0.2); }
+        .vinyl {
+            width: 130px; height: 130px; background: #111; border-radius: 50%; margin: 0 auto 20px;
+            border: 4px solid #333; position: relative; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .vinyl::after { content:''; width: 30px; height: 30px; background: var(--text-pink); border-radius: 50%; }
+        .vinyl.spin { animation: spin 3s linear infinite; }
+        
+        .track-title { font-size: 1.5rem; font-family: var(--font-heading); color: var(--text-main); }
+        .track-artist { font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px; color: var(--text-main); }
+        .progress-bar { width: 100%; height: 4px; background: rgba(59, 27, 45, 0.2); border-radius: 2px; margin-bottom: 20px; position: relative;}
+        .progress-fill { position: absolute; left: 0; top: 0; height: 100%; width: 30%; background: var(--text-pink); border-radius: 2px;}
+        
+        .controls { display: flex; justify-content: center; gap: 30px; font-size: 1.2rem; color: var(--text-main); margin-bottom: 30px;}
+        .play-btn { width: 45px; height: 45px; background: rgba(59, 27, 45, 0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-pink); font-size: 1.2rem;}
+        
+        .playlist-item {
+            display: flex; align-items: center; padding: 12px 15px; border-radius: 10px;
+            background: rgba(59, 27, 45, 0.02); margin-bottom: 10px; text-align: left; color: var(--text-main);
+        }
+        .playlist-item.active { border: 1px solid rgba(199, 91, 135, 0.4); }
+        .pl-num { font-size: 0.8rem; opacity: 0.5; width: 20px; }
+        .pl-info { flex: 1; }
+        .pl-title { font-size: 0.9rem; }
+        .pl-artist { font-size: 0.7rem; opacity: 0.6; }
+        .pl-icon { font-size: 0.8rem; color: var(--text-pink); opacity: 0; }
+        .playlist-item.active .pl-icon { opacity: 1; }
+
+        /* --- Jar / Doa Khusus --- */
+        .jar-box { text-align: center; margin-top: 30px; }
+        .jar-img { font-size: 7rem; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.15)); transition: 0.2s;}
+        .shake-btn {
+            background: rgba(59, 27, 45, 0.05); border: 1px solid rgba(59, 27, 45, 0.2);
+            color: var(--text-main); padding: 12px 28px; border-radius: 30px; font-family: var(--font-text);
+            font-size: 0.85rem; margin-top: 20px; cursor: pointer; margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(199, 91, 135, 0.1);
+        }
+        .shake-btn:hover { background: var(--text-pink); color: #fff; transform: translateY(-2px); }
+        
+        .prayer-card {
+            background: #ffffff; color: #333; padding: 30px 25px; border-radius: 15px;
+            font-family: var(--font-text); font-size: 0.95rem; line-height: 1.7; text-align: left;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            opacity: 0; transform: scale(0.95) translateY(20px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            display: none; position: relative; border-left: 4px solid var(--text-pink);
+        }
+        .prayer-card.show {
+            display: block;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            animation: pulseGlow 3s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 0 10px rgba(199,91,135,0.15); }
+            100% { box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 0 25px rgba(199,91,135,0.3); }
+        }
+        .prayer-title {
+            font-family: var(--font-heading); font-size: 1.2rem; color: #9e3658; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #eee; padding-bottom: 8px;
+        }
+
+        /* --- Fitur Baru: Minta Kado Spesial dari Cian Gosen --- */
+        .special-gift-box {
+            background: #ffffff; border-radius: 20px; padding: 30px 20px;
+            box-shadow: 0 10px 30px rgba(199, 91, 135, 0.15); margin-top: 30px;
+            border: 1px dashed var(--text-pink); text-align: center; position: relative;
+            overflow: hidden;
+        }
+        .special-gift-icon {
+            font-size: 4rem; margin-bottom: 15px;
+            animation: floatGift 2.5s ease-in-out infinite;
+        }
+        @keyframes floatGift {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+        .gift-input-group {
+            display: flex; flex-direction: column; gap: 12px; margin-top: 20px;
+        }
+        .gift-input {
+            width: 100%; padding: 14px 18px; border-radius: 12px;
+            border: 1px solid rgba(59, 27, 45, 0.2); font-family: var(--font-text);
+            font-size: 0.9rem; background: var(--bg-lighter); color: var(--text-main);
+            outline: none; transition: 0.3s;
+        }
+        .gift-input:focus {
+            border-color: var(--text-pink);
+            box-shadow: 0 0 8px rgba(199, 91, 135, 0.25);
+            background: #fff;
+        }
+        .submit-gift-btn {
+            background: var(--text-pink); color: #fff; border: none;
+            padding: 14px 20px; border-radius: 12px; font-family: var(--font-text);
+            font-weight: 500; font-size: 0.95rem; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(199, 91, 135, 0.3); transition: all 0.3s ease;
+        }
+        .submit-gift-btn:hover { background: #b04974; transform: translateY(-2px); }
+        .gift-result-card {
+            background: linear-gradient(135deg, #f5ede4, #ffffff);
+            border-radius: 15px; padding: 20px; margin-top: 20px;
+            border-left: 4px solid var(--text-pink); text-align: left;
+            animation: fadeInMsg 0.5s forwards; display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* --- Final Message --- */
+        .final { text-align: center; padding: 80px 20px; height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        .final h1 { font-size: 2.8rem; line-height: 1.2; color: var(--text-pink); margin-bottom: 30px;}
+        .final p { font-size: 0.85rem; line-height: 1.6; opacity: 0.8; margin-bottom: 40px; color: var(--text-main); }
+        .grad-btn {
+            background: rgba(59, 27, 45, 0.05); border: 1px solid rgba(59, 27, 45, 0.2);
+            color: var(--text-main); padding: 12px 30px; border-radius: 30px; font-size: 1rem; cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Background: Bunga-bunga, Foto+Topi (turun ke bawah), dan Topi (berputar) -->
+<div class="falling-elements" id="elements-bg"></div>
+
+<div class="container">
+
+    <!-- 1. LOADING SCREEN -->
+    <div id="screen-loading" class="screen">
+        <i class="fa-solid fa-fan loading-flower"></i>
+        <p class="loading-text">Preparing something special for you...</p>
+    </div>
+
+    <!-- 2. PASSCODE SCREEN -->
+    <div id="screen-passcode" class="screen hidden">
+        <i class="fa-solid fa-graduation-cap" style="color:var(--text-pink); font-size:2rem; margin-bottom:15px;"></i>
+        <h2>For You, My Love</h2>
+        <p>Enter our secret code</p>
+        
+        <div class="dots" id="dots">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+
+        <div class="keypad">
+            <button class="key" onclick="pressKey(1)">1</button>
+            <button class="key" onclick="pressKey(2)">2</button>
+            <button class="key" onclick="pressKey(3)">3</button>
+            <button class="key" onclick="pressKey(4)">4</button>
+            <button class="key" onclick="pressKey(5)">5</button>
+            <button class="key" onclick="pressKey(6)">6</button>
+            <button class="key" onclick="pressKey(7)">7</button>
+            <button class="key" onclick="pressKey(8)">8</button>
+            <button class="key" onclick="pressKey(9)">9</button>
+            <div></div>
+            <button class="key" onclick="pressKey(0)">0</button>
+            <button class="key" onclick="deleteKey()"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+        </div>
+        <p style="margin-top:30px; font-size:0.75rem; opacity:0.5;">Hint: our special date 🤍</p>
+    </div>
+
+    <!-- 3. GIFT SCREEN -->
+    <div id="screen-gift" class="screen hidden">
+        <p class="gift-text">Tap the gift box to open it 🎁</p>
+        <div class="gift-img" onclick="openGift()">💝</div>
+    </div>
+
+    <!-- 4. MAIN SCROLLABLE CONTENT -->
+    <div id="main-content" class="scrollable">
+        
+        <!-- Hero Section -->
+        <div class="section hero">
+            <span class="section-label">Your Special Day</span>
+            <h1>Happy<br>Graduation<br>Cian Ochen</h1>
+            <p class="hero-date">A DAY TO CELEBRATE YOUR SUCCESS</p>
+            <i class="fa-solid fa-chevron-down scroll-down"></i>
+        </div>
+
+        <!-- Bouquet Section -->
+        <div class="section">
+            <span class="section-label">MY FIRST GIFT</span>
+            <h2 style="text-align: center; font-size: 2rem;">A Digital Bouquet</h2>
+            <p style="text-align: center; font-size: 0.75rem; opacity: 0.7; margin-bottom: 25px;">Tap each flower to reveal its special message</p>
+            
+            <div class="bouquet-wrapper">
+                <div class="bouquet-items">
+                    <div class="bouquet-flower" onclick="showBouquetMessage(0)" title="Rose">🌹</div>
+                    <div class="bouquet-flower" onclick="showBouquetMessage(1)" title="Sunflower">🌻</div>
+                    <div class="bouquet-flower" onclick="showBouquetMessage(2)" title="Tulip">🌷</div>
+                    <div class="bouquet-flower" onclick="showBouquetMessage(3)" title="Cherry Blossom">🌸</div>
+                </div>
+                
+                <div class="bouquet-display-box">
+                    <p class="bouquet-message" id="bouquet-msg-text">✨ Ketuk salah satu bunga di atas untuk melihat pesan spesial di hari wisudamu! ✨</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Letter Section -->
+        <div class="section">
+            <span class="section-label">FROM MY HEART</span>
+            <h2 style="text-align: center; font-size: 2rem;">A Letter For You</h2>
+            
+            <div class="letter-paper">
+                <h2>Cian Ochen tersayang,</h2>
+                <p>Happy Graduation, Cian Ochen! ✨ Di hari kelulusanmu yang spesial ini, aku cuma mau bilang kalau aku ikut bangga sama kamu. Meskipun kita baru saling kenal, aku tahu kamu sudah berusaha keras, melewati malam-malam panjang, dan berjuang demi impianmu.</p>
+                <p>Melihatmu mencapai titik pencapaian ini mengisi hatiku dengan begitu banyak kebahagiaan. Kamu membawa cahaya ke setiap sudut hidupku, dan semangatmu selalu menginspirasiku setiap hari.</p>
+                <p>Saat kamu melangkah ke babak baru dalam hidupmu ini, aku berharap semua impianmu terus menjadi kenyataan. Kamu pantas mendapatkan setiap hal indah, setiap kesuksesan, dan setiap kebahagiaan yang ditawarkan dunia ini.</p>
+                <p style="font-style: italic; font-size: 0.85rem; margin-top: 10px;">P.S. — Aku bakal selalu ada di sini buat kasih dukungan dan semangat buat kamu ke depannya! 🎓</p>
+                <div class="by-gosin">BY GOSEN</div>
+            </div>
+        </div>
+
+        <!-- Photo Gallery -->
+        <div class="section">
+            <span class="section-label">A COLLECTION OF MEMORIES</span>
+            <h2 style="text-align: center; font-size: 1.8rem;">Our Photo Memories</h2>
+            <p style="text-align: center; font-size: 0.75rem; opacity: 0.7;">Every picture holds a beautiful story</p>
+            
+            <div class="photo-feed">
+                <div class="photo-card">
+                    <img src="1000828380.png" alt="Memory">
+                    <div class="photo-caption">Always supporting you</div>
+                </div>
+                <div class="photo-card">
+                    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=400&auto=format&fit=crop" alt="Memory">
+                    <div class="photo-caption">Our favourite café where you studied</div>
+                </div>
+                <div class="photo-card">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop" alt="Memory">
+                    <div class="photo-caption">Taking a break at the beach</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Journey -->
+        <div class="section">
+            <span class="section-label">AWAL CERITA</span>
+            <h2 style="text-align: center; font-size: 1.8rem;">Baru Mulai Bersama</h2>
+            
+            <div class="timeline-container">
+                <div class="time-item">
+                    <div class="time-icon">✨</div>
+                    <div class="time-date">BARU KENAL</div>
+                    <div class="time-title">Awal Perjalanan Kita</div>
+                    <div class="time-desc">Kita baru saja mulai saling mengenal, dan setiap momen singkat ini sudah terasa begitu berharga dan menyenangkan.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Music Player -->
+        <div class="section">
+            <span class="section-label">OUR SONGS</span>
+            <h2 style="text-align: center; font-size: 1.8rem;">Special Playlist</h2>
+            <p style="text-align: center; font-size: 0.75rem; opacity: 0.7;">Songs that always remind me of you</p>
+
+            <div class="player-box">
+                <div class="vinyl" id="vinyl"></div>
+                <h3 class="track-title" id="track-title" style="text-align:center;">Shape Of My Heart</h3>
+                <p class="track-artist" id="track-artist" style="text-align:center;">Backstreet Boys</p>
+                
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+                
+                <audio id="audio" src=""></audio>
+
+                <div class="controls">
+                    <i class="fa-solid fa-backward-step" onclick="prevSong()"></i>
+                    <div class="play-btn" onclick="togglePlay()"><i class="fa-solid fa-play" id="play-icon"></i></div>
+                    <i class="fa-solid fa-forward-step" onclick="nextSong()"></i>
+                </div>
+
+                <div class="playlist">
+                    <div class="playlist-item active" onclick="playSong(0)">
+                        <div class="pl-num">1</div>
+                        <div class="pl-info">
+                            <div class="pl-title">Shape Of My Heart</div>
+                            <div class="pl-artist">Backstreet Boys</div>
+                        </div>
+                        <i class="fa-solid fa-music pl-icon"></i>
+                    </div>
+                    <div class="playlist-item" onclick="playSong(1)">
+                        <div class="pl-num">2</div>
+                        <div class="pl-info">
+                            <div class="pl-title">Angel Baby</div>
+                            <div class="pl-artist">Troye Sivan</div>
+                        </div>
+                        <i class="fa-solid fa-music pl-icon"></i>
+                    </div>
+                    <div class="playlist-item" onclick="playSong(2)">
+                        <div class="pl-num">3</div>
+                        <div class="pl-info">
+                            <div class="pl-title">My Love</div>
+                            <div class="pl-artist">Westlife</div>
+                        </div>
+                        <i class="fa-solid fa-music pl-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jar / Doa Khusus -->
+        <div class="section">
+            <span class="section-label">FROM MY HEART TO YOURS</span>
+            <h2 style="text-align: center; font-size: 1.5rem;">Doa & Harapan Spesial</h2>
+            <p style="text-align: center; font-size: 0.75rem; opacity: 0.7;">Ketuk untuk membuka doa dan ungkapan hati 🤍🙏</p>
+
+            <div class="jar-box">
+                <div class="jar-img" id="jar">🙏✨</div>
+                <button class="shake-btn" onclick="revealPrayer()">Buka Doa & Pesan Spesial</button>
+                
+                <!-- Kartu Doa dengan Animasi Hidup -->
+                <div class="prayer-card" id="prayer-card">
+                    <div class="prayer-title"><i class="fa-solid fa-heart"></i> Untuk Hasian Monik</div>
+                    <p style="margin-bottom: 15px;">Selamat atas gelar Magisternya, ya hasian monik! Perjalanan yang luar biasa panjang dan melelahkan, tapi kamu berhasil membuktikan kalau kamu bisa melewatinya dengan sangat hebat. Terima kasih sudah berjuang keras, bukan cuma buat dirimu sendiri, tapi juga buat masa depan keluarga mu dan sebagai contoh buat anggi" (ade") kamu.</p>
+                    <p style="margin-top: 10px; font-weight: 500; border-top: 1px dashed #ddd; padding-top: 12px; font-style: italic; color: #555;">
+                        "Ya Tuhan, terima kasih telah memberikan kekuatan, kesabaran, dan kelancaran untuk pasanganku, Monik Sihotang, hingga ia bisa berdiri di titik ini. Berkatilah gelar dan ilmu yang kini ia miliki. Jadikanlah pencapaian ini sebagai pintu pembuka untuk rezeki yang baik, karier yang cemerlang, dan masa depan yang penuh kebahagiaan. Amin."
+                    </p>
+                    <div class="by-gosin">BY GOSEN</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FITUR BARU: Minta Kado Spesial dari Cian Gosen -->
+        <div class="section">
+            <span class="section-label">WISH & GIFT</span>
+            <h2 style="text-align: center; font-size: 1.8rem;">Minta Kado Spesial dari Cian Gosen</h2>
+            <p style="text-align: center; font-size: 0.75rem; opacity: 0.7; margin-bottom: 15px;">Tuliskan kado atau hal spesial yang kamu inginkan dariku 🎁</p>
+
+            <div class="special-gift-box">
+                <div class="special-gift-icon">🎀</div>
+                <h3 style="font-size: 1.2rem; color: var(--text-main);">Kado Spesial dari Gosen</h3>
+                <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 15px;">Apa kado atau keinginan yang mau kamu minta di hari spesialmu?</p>
+                
+                <div class="gift-input-group">
+                    <input type="text" id="gift-input" class="gift-input" placeholder="Contoh: Traktir makan malam / Bunga / dll...">
+                    <button class="submit-gift-btn" onclick="submitGiftRequest()">Kirim Permintaan Kado 💌</button>
+                </div>
+
+                <div class="gift-result-card" id="gift-result-card">
+                    <div style="font-family: var(--font-heading); font-size: 1.1rem; color: var(--text-pink); margin-bottom: 8px;">
+                        <i class="fa-solid fa-gift"></i> Permintaan Kado Tercatat!
+                    </div>
+                    <p id="gift-output-text" style="font-size: 0.9rem; color: #333; line-height: 1.5; font-style: italic;"></p>
+                    <p style="font-size: 0.75rem; color: #777; margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px;">
+                        Pesan ini sudah disiapkan untuk dikirimkan langsung ke Gosen! 🤍
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Message -->
+        <div class="section final">
+            <span class="section-label">With all my heart</span>
+            <h1>May your future<br>be as beautiful<br>as your dreams</h1>
+            <p>Happy graduation, Cian Ochen. I am so proud of everything you've accomplished. May your days always be filled with success, love, and all the beautiful things you deserve.</p>
+            <p style="font-family: var(--font-heading); font-style: italic;">— With love that never runs out 💖 —</p>
+            <button class="grad-btn" style="margin-top: 30px;">🎓 Happy Graduation!</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- 0. Setup Background Elements (Bunga, 4 Foto+Topi Jatuh ke Bawah, 4 Topi Berputar) ---
+    function createBackgroundElements() {
+        const bg = document.getElementById('elements-bg');
+        
+        // 1. Bunga-bunga & kilauan yang berterbangan
+        const flowers = ['🌸', '🌺', '🌼', '✨'];
+        for(let i=0; i<12; i++) {
+            let f = document.createElement('div');
+            f.className = 'flower-flake';
+            f.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+            f.style.left = Math.random() * 100 + 'vw';
+            f.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            f.style.animationDelay = Math.random() * 5 + 's';
+            f.style.fontSize = (Math.random() * 0.5 + 0.8) + 'rem';
+            bg.appendChild(f);
+        }
+
+        // 2. 4 Elemen Gabungan (Foto + Topi) - JATUH KE BAWAH
+        const comboHTML = `
+            <div class="grad-photo-combo">
+                <img src="1000828380.png" alt="Cian Ochen">
+                <div class="mini-cap">🎓</div>
+            </div>
+        `;
+        for(let i=0; i<4; i++) {
+            let el = document.createElement('div');
+            el.className = 'flying-falling';
+            el.innerHTML = comboHTML;
+            el.style.left = (i * 24 + 5) + 'vw';
+            el.style.animationDuration = (7 + (i % 2) * 2) + 's';
+            el.style.animationDelay = (i * 1.8) + 's';
+            bg.appendChild(el);
+        }
+
+        // 3. 4 Elemen Topi Wisuda Saja - Melayang & Berputar-putar
+        for(let i=0; i<4; i++) {
+            let el = document.createElement('div');
+            el.className = 'floating-cap';
+            el.innerHTML = '🎓';
+            el.style.left = (i * 24 + 12) + 'vw';
+            el.style.animationDuration = (8 + (i % 3) * 2) + 's';
+            el.style.animationDelay = (i * 1.2) + 's';
+            bg.appendChild(el);
+        }
+    }
+    createBackgroundElements();
+
+    // --- Interaktif Buket Bunga (Pesan dalam Bahasa Indonesia) ---
+    const bouquetMessages = [
+        "🌹 \"Kamu adalah mawar terindah yang pernah mekar — penuh dengan cinta, keanggunan, dan kecantikan yang luar biasa di hari wisudamu.\"",
+        "🌻 \"Seperti bunga matahari, kamu selalu berputar ke arah cahaya, meraih impian terterangmu dan membagikan kehangatanmu.\"",
+        "🌷 \"Langka dan elegan seperti bunga tulip, kamu telah berdiri teguh melewati semua tantangan akademik dengan kekuatan yang luar biasa.\"",
+        "🌸 \"Bunga sakura membawa kebahagiaan murni, persis seperti kebahagiaan yang kamu bawa ke dalam hidupku di hari wisuda yang indah ini!\""
+    ];
+
+    function showBouquetMessage(index) {
+        const msgContainer = document.getElementById('bouquet-msg-text');
+        msgContainer.style.animation = 'none';
+        msgContainer.offsetHeight; // trigger reflow
+        msgContainer.style.animation = 'fadeInMsg 0.5s forwards';
+        msgContainer.innerText = bouquetMessages[index];
+    }
+
+    // --- 1. Loading ---
+    window.onload = () => {
+        setTimeout(() => {
+            document.getElementById('screen-loading').classList.add('hidden');
+            document.getElementById('screen-passcode').classList.remove('hidden');
+        }, 2500);
+    };
+
+    // --- 2. Passcode ---
+    let code = "";
+    const dots = document.querySelectorAll('.dot');
+    function pressKey(n) {
+        if(code.length < 6) {
+            code += n;
+            updateDots();
+        }
+        if(code.length === 6) setTimeout(checkCode, 300);
+    }
+    function deleteKey() {
+        if(code.length > 0) { code = code.slice(0, -1); updateDots(); }
+    }
+    function updateDots() {
+        dots.forEach((dot, i) => {
+            if(i < code.length) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+    }
+    function checkCode() {
+        document.getElementById('screen-passcode').classList.add('hidden');
+        document.getElementById('screen-gift').classList.remove('hidden');
+    }
+
+    // --- 3. Gift Open ---
+    function openGift() {
+        const gift = document.querySelector('.gift-img');
+        gift.classList.add('opening');
+        setTimeout(() => {
+            document.getElementById('screen-gift').classList.add('hidden');
+            document.getElementById('main-content').classList.add('active');
+        }, 800);
+    }
+
+    // --- 4. Music Player ---
+    const songs = [
+        { title: "Shape Of My Heart", artist: "Backstreet Boys", src: "" },
+        { title: "Angel Baby", artist: "Troye Sivan", src: "" },
+        { title: "My Love", artist: "Westlife", src: "" }
+    ];
+    let currSong = 0;
+    let isPlay = false;
+    const audio = document.getElementById('audio');
+    const playIcon = document.getElementById('play-icon');
+    const vinyl = document.getElementById('vinyl');
+    const itemsList = document.querySelectorAll('.playlist-item');
+
+    function loadSong(i) {
+        document.getElementById('track-title').innerText = songs[i].title;
+        document.getElementById('track-artist').innerText = songs[i].artist;
+        audio.src = songs[i].src;
+        itemsList.forEach(el => el.classList.remove('active'));
+        itemsList[i].classList.add('active');
+    }
+    function togglePlay() {
+        if(!audio.src || audio.src === window.location.href) {
+            if(isPlay) { playIcon.classList.replace('fa-pause', 'fa-play'); vinyl.classList.remove('spin'); }
+            else { playIcon.classList.replace('fa-play', 'fa-pause'); vinyl.classList.add('spin'); }
+            isPlay = !isPlay;
+            return;
+        }
+        if(isPlay) { audio.pause(); playIcon.classList.replace('fa-pause', 'fa-play'); vinyl.classList.remove('spin'); }
+        else { audio.play(); playIcon.classList.replace('fa-play', 'fa-pause'); vinyl.classList.add('spin'); }
+        isPlay = !isPlay;
+    }
+    function playSong(i) { currSong = i; loadSong(i); if(!isPlay) togglePlay(); }
+    function nextSong() { playSong((currSong + 1) % songs.length); }
+    function prevSong() { playSong((currSong - 1 + songs.length) % songs.length); }
+
+    // --- 5. Doa & Pesan Spesial (Animasi Hidup / Muncul Perlahan) ---
+    function revealPrayer() {
+        const jar = document.getElementById('jar');
+        const card = document.getElementById('prayer-card');
+        
+        // Animasi goyang ikon
+        jar.style.transform = 'rotate(15deg) scale(1.1)';
+        setTimeout(()=> jar.style.transform = 'rotate(-15deg) scale(1.1)', 100);
+        setTimeout(()=> jar.style.transform = 'rotate(15deg) scale(1.1)', 200);
+        setTimeout(()=> jar.style.transform = 'rotate(0deg) scale(1)', 300);
+
+        // Menampilkan kartu doa dengan efek animasi hidup
+        setTimeout(() => {
+            card.classList.toggle('show');
+        }, 350);
+    }
+
+    // --- 6. Fitur Baru: Minta Kado Spesial dari Cian Gosen ---
+    function submitGiftRequest() {
+        const inputVal = document.getElementById('gift-input').value.trim();
+        const resultCard = document.getElementById('gift-result-card');
+        const outputText = document.getElementById('gift-output-text');
+
+        if(inputVal === "") {
+            alert("Tolong tuliskan kado atau keinginan yang kamu mau terlebih dahulu ya, 🤍");
+            return;
+        }
+
+        outputText.innerText = `"${inputVal}"`;
+        resultCard.style.display = 'block';
+
+        // Opsional: Membuat link WhatsApp otomatis agar langsung terkirim ke WhatsApp Anda (Gosen)
+        // Format nomor bisa disesuaikan atau dibiarkan tampil di kartu interaktif website.
+        setTimeout(() => {
+            let waMessage = encodeURIComponent(`Hai Gosen, ini kado spesial kelulusan yang aku minta: ${inputVal} 🎁✨`);
+            // Anda bisa aktifkan baris di bawah ini jika ingin langsung mengarah ke WhatsApp:
+            // window.open(`https://wa.me/?text=${waMessage}`, '_blank');
+        }, 800);
+    }
+</script>
+
+</body>
+</html>
